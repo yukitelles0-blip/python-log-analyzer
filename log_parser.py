@@ -7,7 +7,7 @@ podem usar facilmente.
 """
 
 import re
-
+import ipaddress
 # Padrao esperado de cada linha do log:
 # 2026-08-17 08:30:01 IP=192.168.1.10 LOGIN_FAILED user=admin
 LOG_PATTERN = re.compile(
@@ -57,7 +57,14 @@ def parse_line(line):
     if not match:
         return None
 
-    return match.groupdict()
+    event = match.groupdict()
+
+try:
+    ipaddress.ip_address(event["ip"])
+except ValueError:
+    return None
+
+return event
 
 
 def parse_log_file(file_path):
