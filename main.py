@@ -5,14 +5,14 @@ Ponto de entrada do programa.
 Aqui juntamos os modulos log_parser, analyzer e reporter.
 
 Para executar (a partir da pasta raiz do projeto):
-    python src/main.py
+    python main.py
 """
 
 import sys
 import os
 
-# Garante que o Python encontra os outros arquivos da pasta src/
-# mesmo quando o main.py e executado de outra pasta.
+# # Garante que o Python encontra os outros módulos do projeto.
+# Os arquivos estão na mesma pasta que o main.py.
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from log_parser import parse_log_file
