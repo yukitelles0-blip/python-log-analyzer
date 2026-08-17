@@ -8,6 +8,8 @@ podem usar facilmente.
 
 import re
 import ipaddress
+
+
 # Padrao esperado de cada linha do log:
 # 2026-08-17 08:30:01 IP=192.168.1.10 LOGIN_FAILED user=admin
 LOG_PATTERN = re.compile(
@@ -21,31 +23,19 @@ LOG_PATTERN = re.compile(
 def read_log_file(file_path):
     """
     Le o arquivo de log e retorna uma lista de linhas (strings).
-
-    Levanta FileNotFoundError se o arquivo nao existir
-    (o Python ja faz isso sozinho com open(), entao nem
-    precisamos tratar aqui dentro).
     """
     with open(file_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
+
     return lines
 
 
 def parse_line(line):
     """
-    Tenta transformar uma linha de log em um dicionario de evento.
+    Transforma uma linha de log em um dicionario de evento.
 
-    Retorna um dicionario no formato:
-    {
-        "timestamp": "2026-08-17 08:30:01",
-        "ip": "192.168.1.10",
-        "event_type": "LOGIN_FAILED",
-        "user": "admin"
-    }
-
-    Retorna None se a linha nao seguir o formato esperado.
-    Assim, uma linha "quebrada" no meio do arquivo nao derruba
-    o programa inteiro, ela e simplesmente ignorada.
+    Retorna None se a linha nao seguir o formato esperado
+    ou se o IP nao for valido.
     """
     line = line.strip()
 
@@ -59,25 +49,25 @@ def parse_line(line):
 
     event = match.groupdict()
 
-try:
-    ipaddress.ip_address(event["ip"])
-except ValueError:
-    return None
+    try:
+        ipaddress.ip_address(event["ip"])
+    except ValueError:
+        return None
 
-return event
+    return event
 
 
 def parse_log_file(file_path):
     """
-    Le o arquivo de log e retorna uma lista de eventos validos (dicionarios).
-
-    Linhas que nao seguem o formato esperado sao ignoradas.
+    Le o arquivo de log e retorna uma lista de eventos validos.
     """
     lines = read_log_file(file_path)
 
     events = []
+
     for line in lines:
         event = parse_line(line)
+
         if event is not None:
             events.append(event)
 
