@@ -10,12 +10,12 @@ O projeto foi criado com fins **educacionais**, como parte dos meus estudos em P
 
 ## 🎯 Objetivo
 
-Praticar conceitos fundamentais de análise de logs, que são comuns no trabalho de um analista de SOC (Security Operations Center):
+Praticar conceitos fundamentais de análise de logs, comuns no trabalho de um analista de SOC (Security Operations Center):
 
 - ler e interpretar arquivos de log;
 - identificar tentativas de login malsucedidas;
 - detectar padrões que possam indicar força bruta;
-- validar endereços IPv4;
+- validar endereços IP;
 - gerar um relatório resumido dos eventos;
 - praticar testes automatizados em Python.
 
@@ -34,7 +34,7 @@ Os módulos `re` e `ipaddress` fazem parte da biblioteca padrão do Python.
 - [x] Identificação de logins malsucedidos (`LOGIN_FAILED`)
 - [x] Identificação de logins bem-sucedidos (`LOGIN_SUCCESS`)
 - [x] Contagem de falhas de login por endereço IP
-- [x] Validação de endereços IPv4
+- [x] Validação de endereços IP
 - [x] Detecção de possíveis tentativas de força bruta (5+ falhas do mesmo IP)
 - [x] Geração de alertas para IPs suspeitos
 - [x] Resumo final da análise
@@ -51,8 +51,8 @@ log-analyzer/
 ├── .gitignore
 ├── sample.log
 │
-├── main.py              # Ponto de entrada do programa
-├── log_parser.py        # Leitura, interpretação e validação dos logs
-├── analyzer.py          # Lógica de análise e detecção
-├── reporter.py          # Exibição dos resultados no terminal
-└── test_analyzer.py     # Testes automatizados com pytest
+├── main.py
+├── log_parser.py
+├── analyzer.py
+├── reporter.py
+└── test_analyzer.py
