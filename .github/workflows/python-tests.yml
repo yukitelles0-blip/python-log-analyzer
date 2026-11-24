@@ -3,11 +3,8 @@ name: Python Tests
 
 on:
   push:
-    branches:
-      - feature/v2-temporal-detection
   pull_request:
-    branches:
-      - feature/v2-temporal-detection
+  workflow_dispatch:
 
 permissions:
   contents: read
