@@ -3,7 +3,7 @@
 main.py
 
 Ponto de entrada do Log Analyzer.
-Coordena a leitura, análise e apresentação dos resultados.
+Coordena leitura, análise, apresentação e exportação dos resultados.
 """
 
 from log_parser import parse_log_file
@@ -19,6 +19,7 @@ from analyzer import (
 )
 
 from reporter import print_full_report
+from exporter import export_reports
 
 
 def get_log_path_from_user():
@@ -44,9 +45,7 @@ def main():
         return
 
     except UnicodeDecodeError:
-        print(
-            f"[ERRO] Não foi possível ler o arquivo: {log_path}"
-        )
+        print(f"[ERRO] Não foi possível ler o arquivo: {log_path}")
         return
 
     except OSError as error:
@@ -68,7 +67,7 @@ def main():
         BRUTE_FORCE_THRESHOLD
     )
 
-    # Detecção de possíveis ataques por janela temporal.
+    # Detecção temporal de possíveis ataques.
     temporal_alerts = detect_brute_force_by_time(
         events,
         threshold=BRUTE_FORCE_THRESHOLD,
@@ -84,7 +83,7 @@ def main():
     summary["invalid_lines"] = invalid_lines
     summary["total_alertas_temporais"] = len(temporal_alerts)
 
-    # Apresentação dos resultados.
+    # Apresentação dos resultados no terminal.
     print_full_report(
         log_path,
         summary,
@@ -92,6 +91,23 @@ def main():
         temporal_alerts,
         suspicious_users
     )
+
+    # Exportação dos relatórios.
+    try:
+        json_file, csv_file = export_reports(
+            log_path,
+            summary,
+            suspicious_ips,
+            temporal_alerts,
+            suspicious_users
+        )
+
+        print("\n[EXPORTAÇÃO CONCLUÍDA]")
+        print(f"Relatório JSON: {json_file}")
+        print(f"Relatório CSV: {csv_file}")
+
+    except OSError as error:
+        print(f"\n[ERRO] Não foi possível exportar os relatórios: {error}")
 
 
 if __name__ == "__main__":
